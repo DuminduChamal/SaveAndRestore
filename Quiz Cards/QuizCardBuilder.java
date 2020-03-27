@@ -1,9 +1,6 @@
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import javafx.event.ActionEvent;
-
 import java.awt.*;
 import java.io.*;
 
@@ -57,9 +54,9 @@ public class QuizCardBuilder
 
         nextButton.addActionListener(new NextCardListner());
         JMenuBar menuBar = new JMenuBar();
-        JMenu filMenu = new JMenu("File");
+        JMenu fileMenu = new JMenu("File");
         JMenuItem newMenuItem = new JMenuItem("New");
-        JMenuItem saveMenuItem = newMenuItem("Save");
+        JMenuItem saveMenuItem = new JMenuItem("Save");
 
         newMenuItem.addActionListener(new NewMenuListner());
         saveMenuItem.addActionListener(new SaveMenuListner());
@@ -98,7 +95,7 @@ public class QuizCardBuilder
 
     public class NewMenuListner implements ActionListener
     {
-        public void actionPerformed(Action ev)
+        public void actionPerformed(ActionEvent ev)
         {
             cardList.clear();
             clearCard();
