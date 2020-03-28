@@ -1,9 +1,6 @@
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import javafx.scene.control.MenuBar;
-
 import java.awt.*;
 import java.io.*;
 
@@ -54,5 +51,76 @@ public class QuizCardPlayer
         frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
         frame.setSize(640,500);
         frame.setVisible(true);
+    }
+
+    public class NextCardListener implements ActionListener
+    {   
+        public void actionPerformed(ActionEvent ev)
+        {
+            if(isShowAnswer)
+            {
+                display.setText(currentCard.getAnswer());
+                nextButton.setText("Next Card");
+                isShowAnswer=false;
+            }
+            else
+            {
+                if(currentCardIndex<cardList.size())
+                    showNextCard();
+                else   
+                {
+                    display.setText("That was last card!");
+                    nextButton.setEnabled(false);
+                }
+            }
+        }
+    }
+
+    public class OpenMenuListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent ev) 
+        {
+            JFileChooser fileOpen = new JFileChooser();
+            fileOpen.showOpenDialog(frame);
+            loadFile(fileOpen.getSelectedFile());
+        }
+    }
+
+    private void loadFile(File file)
+    {
+        cardList = new ArrayList<QuizCard>();
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while((line=reader.readLine())!=null)
+            {
+                makeCard(line);
+            }
+            reader.close();
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Couldnot read the card file");
+            ex.printStackTrace();
+        }
+        showNextCard();
+    }
+    
+    private void makeCard(String  lineToParse)
+    {
+        String[] result = lineToParse.split("/");
+        QuizCard card = new QuizCard(result[0], result[1]);
+        cardList.add(card);
+        System.out.println("Made a card");
+    }
+
+    private void showNextCard()
+    {
+        currentCard = cardList.get(currentCardIndex);
+        currentCardIndex++;
+        display.setText(currentCard.getQuestion());
+        nextButton.setText("Show Answer");
+        isShowAnswer=true;
     }
 }
